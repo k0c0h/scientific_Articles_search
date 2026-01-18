@@ -1,57 +1,58 @@
 class DateFormatter {
-    static format(dateString) {
-        if (!dateString) return "No date available";
-
-        return new Date(dateString).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
+    static format(date) {
+        if (!date) return "No date";
+        return new Date(date).toLocaleDateString("en-US", {
+            year: "numeric", month: "long", day: "numeric"
         });
     }
 }
 
 class TableRenderer {
-    constructor(element) {
+    constructor(element, onRowClick) {
         this.element = element;
+        this.onRowClick = onRowClick;
     }
 
-    render(data) {
+    highlight(text, query) {
+        if (!query) return text;
+        return text.replace(new RegExp(`(${query})`, "gi"), "<mark>$1</mark>");
+    }
+
+    render(data, query) {
         this.element.innerHTML = "";
 
         if (!data.length) {
             this.element.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center">
-                        No results found
-                    </td>
-                </tr>`;
+                <tr><td colspan="4" class="text-center">No results</td></tr>`;
             return;
         }
 
         data.forEach(doc => {
-            const title = doc.title_display || "No title available";
+            const tr = document.createElement("tr");
+            tr.style.cursor = "pointer";
 
-            const authors = doc.author_display?.join(", ")
-                || "No authors available";
+            tr.innerHTML = `
+                <td>
+                    ${this.highlight(doc.title_display || "No title", query)}
+                    <br>
+                    ${doc.article_type ? `<span class="badge bg-info">${doc.article_type}</span>` : ""}
+                </td>
+                <td>${doc.author_display?.join(", ") || "No authors"}</td>
+                <td>${DateFormatter.format(doc.publication_date)}</td>
+                <td>
+                    ${doc.id
+                        ? `<a href="https://doi.org/${doc.id}" target="_blank"
+                             onclick="event.stopPropagation()">${doc.id}</a>`
+                        : "No DOI"}
+                </td>
+            `;
 
-            const publicationDate = DateFormatter.format(doc.publication_date);
-
-            const doi = doc.id
-                ? `<a href="https://doi.org/${doc.id}" target="_blank">
-                        ${doc.id}
-                   </a>`
-                : "No DOI available";
-
-            this.element.innerHTML += `
-                <tr>
-                    <td>${title}</td>
-                    <td>${authors}</td>
-                    <td>${publicationDate}</td>
-                    <td>${doi}</td>
-                </tr>`;
+            tr.addEventListener("click", () => this.onRowClick(doc));
+            this.element.appendChild(tr);
         });
     }
 }
+
 
 class Pagination {
     constructor(element, onPageChange) {

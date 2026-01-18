@@ -1,11 +1,9 @@
-/* ===== Fondo general ===== */
 body {
     min-height: 100vh;
     background: linear-gradient(135deg, #f8cdda, #c77dff);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== Contenedor principal ===== */
 .container {
     background: rgba(255, 255, 255, 0.95);
     padding: 35px;
@@ -13,7 +11,6 @@ body {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* ===== Título ===== */
 h1 {
     font-weight: 800;
     text-align: center;
@@ -23,7 +20,6 @@ h1 {
     color: transparent;
 }
 
-/* ===== Barra de búsqueda ===== */
 .input-group input {
     border-radius: 30px 0 0 30px;
     border: 2px solid #d63384;
@@ -49,7 +45,6 @@ h1 {
     box-shadow: 0 8px 20px rgba(157, 78, 221, 0.4);
 }
 
-/* ===== Tabla ===== */
 .table {
     margin-top: 20px;
     border-radius: 12px;
@@ -69,7 +64,6 @@ table td {
     vertical-align: middle;
 }
 
-/* ===== Paginación ===== */
 .pagination .page-link {
     color: #9d4edd;
     border-radius: 50%;
